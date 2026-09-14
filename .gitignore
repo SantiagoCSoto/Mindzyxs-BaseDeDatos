@@ -1,0 +1,21 @@
+# SQL Server - nunca subir archivos de datos
+*.mdf
+*.ldf
+*.ndf
+*.bak
+*.bacpac
+*.backup
+
+# Visual Studio / VS
+.vs/
+*.user
+*.suo
+bin/
+obj/
+
+# SSMS / Data
+*.dbmdl
+
+# Sistema
+Thumbs.db
+Desktop.ini

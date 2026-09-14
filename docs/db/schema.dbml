@@ -1,0 +1,227 @@
+Project Mindzyx {
+  database_type: 'SQL Server'
+  Note: 'Mindzyx - Sprint 1 - SQL Server local. Chat realtime va en Firebase (Firestore), no aqui.'
+}
+
+Table roles {
+  id_rol int [pk, increment]
+  nombre varchar(50)
+  descripcion varchar(255)
+}
+
+Table generos {
+  id_genero int [pk, increment]
+  nombre varchar(50)
+}
+
+Table especialidades {
+  id_especialidad int [pk, increment]
+  nombre varchar(100)
+  descripcion varchar(255)
+}
+
+Table instituciones {
+  id_institucion int [pk, increment]
+  nombre varchar(150)
+  direccion varchar(255)
+  telefono varchar(20)
+}
+
+Table estados {
+  id_estado int [pk, increment]
+  nombre varchar(50)
+  descripcion varchar(255) [note: 'Activa, Suspendida, Inactiva, PendienteVerificacion, PendienteAprobacion, Aprobado, Rechazado, Autorizado, etc.']
+}
+
+Table tipos_evento {
+  id_tipo_evento int [pk, increment]
+  nombre varchar(50)
+  descripcion varchar(255)
+}
+
+Table niveles_riesgo {
+  id_nivel_riesgo int [pk, increment]
+  nombre varchar(50)
+  color varchar(7)
+  peso int
+}
+
+Table dias_semana {
+  id_dia int [pk, increment]
+  nombre varchar(20)
+}
+
+Table usuarios {
+  id_usuario int [pk, increment]
+  nombre varchar(100)
+  apellido varchar(100)
+  correo varchar(150) [unique, note: 'HU2-PB1 unicidad']
+  password_hash varchar(255) [note: 'BCrypt, nunca texto plano']
+  fecha_nacimiento date [note: 'para calcular Edad HU2-PB1']
+  id_rol int [ref: > roles.id_rol]
+  id_estado_cuenta int [ref: > estados.id_estado, note: 'Activa, Suspendida, Inactiva, PendienteVerificacion']
+  id_estado_aprobacion int [ref: > estados.id_estado, null, note: 'solo Psicologo: PendienteAprobacion, Aprobado, Rechazado']
+  id_genero int [ref: > generos.id_genero, null]
+  id_institucion int [ref: > instituciones.id_institucion, null]
+  id_especialidad int [ref: > especialidades.id_especialidad, null]
+  file_path varchar(500) [null, note: 'tarjeta PDF HU3-PB1']
+  fecha_registro datetime
+  ultimo_acceso datetime [null]
+}
+
+Table codigos_verificacion {
+  id_codigo int [pk, increment]
+  id_usuario int [ref: > usuarios.id_usuario]
+  codigo varchar(6) [note: 'ej. 123456']
+  tipo varchar(20) [note: 'Registro, Recuperar']
+  expira_en datetime
+  creado_en datetime
+}
+
+Table sesiones {
+  id_sesion int [pk, increment]
+  id_usuario int [ref: > usuarios.id_usuario]
+  token_hash varchar(500)
+  expira_en datetime
+  creada_en datetime
+}
+
+Table cuestionarios {
+  id_cuestionario int [pk, increment]
+  titulo varchar(100)
+  descripcion varchar(500)
+  tipo varchar(20) [note: 'Predeterminado, Personalizado']
+  estado varchar(20) [note: 'Borrador, Publicado']
+  id_creador int [ref: > usuarios.id_usuario]
+  fecha_creacion datetime
+}
+
+Table preguntas {
+  id_pregunta int [pk, increment]
+  id_cuestionario int [ref: > cuestionarios.id_cuestionario]
+  texto varchar(500)
+  orden int
+  tipo varchar(50)
+  puntaje_max int
+}
+
+Table opciones_pregunta {
+  id_opcion int [pk, increment]
+  id_pregunta int [ref: > preguntas.id_pregunta]
+  texto varchar(255)
+  valor int
+  orden int
+}
+
+Table eventos_bienestar {
+  id_evento int [pk, increment]
+  id_paciente int [ref: > usuarios.id_usuario]
+  id_tipo_evento int [ref: > tipos_evento.id_tipo_evento]
+  id_cuestionario int [ref: > cuestionarios.id_cuestionario, null]
+  id_estado int [ref: > estados.id_estado, null]
+  id_nivel_riesgo int [ref: > niveles_riesgo.id_nivel_riesgo, null]
+  fecha_evento datetime
+  puntaje_total int [null]
+  nivel_ansiedad int [null]
+}
+
+Table respuestas {
+  id_respuesta int [pk, increment]
+  id_evento int [ref: > eventos_bienestar.id_evento]
+  id_pregunta int [ref: > preguntas.id_pregunta]
+  valor int [null]
+  texto varchar(500) [null]
+  fecha_respuesta datetime
+}
+
+Table observaciones {
+  id_observacion int [pk, increment]
+  id_psicologo int [ref: > usuarios.id_usuario]
+  id_paciente int [ref: > usuarios.id_usuario]
+  id_evento int [ref: > eventos_bienestar.id_evento, null]
+  contenido text
+  firma varchar(255) [null]
+  fecha_observacion datetime
+}
+
+Table autorizaciones {
+  id_autorizacion int [pk, increment]
+  id_paciente int [ref: > usuarios.id_usuario]
+  id_psicologo int [ref: > usuarios.id_usuario]
+  id_estado int [ref: > estados.id_estado]
+  fecha_solicitud datetime
+  fecha_respuesta datetime [null]
+}
+
+Table asignaciones_cuestionario {
+  id_asignacion int [pk, increment]
+  id_cuestionario int [ref: > cuestionarios.id_cuestionario]
+  id_paciente int [ref: > usuarios.id_usuario]
+  id_psicologo int [ref: > usuarios.id_usuario]
+  fecha_asignacion datetime
+  fecha_limite datetime [null]
+  estado varchar(20)
+}
+
+Table recordatorios {
+  id_recordatorio int [pk, increment]
+  id_paciente int [ref: > usuarios.id_usuario]
+  titulo varchar(100)
+  mensaje varchar(500) [null]
+  hora time
+  activo bit
+}
+
+Table recordatorio_dias {
+  id_recordatorio int [ref: > recordatorios.id_recordatorio]
+  id_dia int [ref: > dias_semana.id_dia]
+  indexes {
+    (id_recordatorio, id_dia) [pk]
+  }
+}
+
+Table lineas_ayuda {
+  id_linea int [pk, increment]
+  nombre varchar(100)
+  telefono varchar(20) [null]
+  url varchar(255) [null]
+  horario varchar(100) [null]
+  cobertura varchar(255) [null]
+  estado varchar(20) [note: 'Activa, Inactiva']
+  descripcion varchar(500) [null]
+}
+
+Table recomendaciones {
+  id_recomendacion int [pk, increment]
+  titulo varchar(200)
+  contenido text
+  nivel_riesgo varchar(20) [null]
+}
+
+Table notificaciones_config {
+  id_config int [pk, increment]
+  id_admin int [ref: > usuarios.id_usuario]
+  tipo varchar(50)
+  canales varchar(100) [note: 'correo,SMS,interna']
+  asunto varchar(255) [null]
+  cuerpo text [null]
+  activo bit
+}
+
+Table respaldos {
+  id_respaldo int [pk, increment]
+  nombre_archivo varchar(255) [note: '.backup agnostico SQL/NoSQL']
+  tamano varchar(20) [null]
+  fecha_hora datetime
+  id_admin int [ref: > usuarios.id_usuario]
+}
+
+Table auth {
+  id_auth int [pk, increment]
+  actor_id_usuario int [ref: > usuarios.id_usuario, null]
+  target_id_usuario int [ref: > usuarios.id_usuario, null]
+  accion varchar(100)
+  detalle text [null]
+  fecha datetime
+  ip_address varchar(45) [null]
+}
