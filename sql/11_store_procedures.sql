@@ -57,7 +57,8 @@ BEGIN
     SET NOCOUNT ON;
     INSERT INTO dbo.sesiones (id_usuario, token_hash, expira_en, creada_en)
     VALUES (@idUsuario, @tokenHash, @expiraEn, SYSDATETIME());
-    SELECT SCOPE_IDENTITY() AS id_sesion;
+    -- CAST: SCOPE_IDENTITY() es numeric(38,0) y el back (SqlQueryRaw<int>) exige INT
+    SELECT CAST(SCOPE_IDENTITY() AS INT) AS id_sesion;
 END;
 GO
 
