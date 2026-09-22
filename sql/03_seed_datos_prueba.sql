@@ -1,7 +1,9 @@
 -- =====================================================
 -- Mindzyx - 03_seed_datos_prueba.sql
 -- Datos FALSOS de prueba para que todos los PCs prueben lo mismo.
--- NO usar correos reales. Password = hash falso 'HASH_PRUEBA_123456a'.
+-- NO usar correos reales. Password = placeholder con formato PBKDF2 valido
+-- (TR_usuarios_PasswordSeguro exige formato v1$...; este hash NO corresponde
+-- a ninguna clave real, esos usuarios no pueden iniciar sesion).
 -- Ejecutar despues de 01 y 02. Se puede re-ejecutar (usa NOT EXISTS por correo).
 -- USE Mindzyxs;
 -- =====================================================
@@ -18,25 +20,25 @@ DECLARE @genM INT = (SELECT id_genero FROM dbo.generos WHERE nombre='Masculino')
 -- 1 admin
 IF NOT EXISTS (SELECT 1 FROM dbo.usuarios WHERE correo='admin@test.com')
 INSERT INTO dbo.usuarios (nombre, apellido, correo, password_hash, fecha_nacimiento, id_rol, id_estado_cuenta, id_genero, fecha_registro)
-VALUES ('Admin','Prueba','admin@test.com','HASH_PRUEBA_123456a','1990-01-01',@rolAdmin,@estActiva,@genM,SYSDATETIME());
+VALUES ('Admin','Prueba','admin@test.com','v1$210000$AAAAAAAAAAAAAAAAAAAAAA$BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB','1990-01-01',@rolAdmin,@estActiva,@genM,SYSDATETIME());
 
 -- 2 pacientes
 IF NOT EXISTS (SELECT 1 FROM dbo.usuarios WHERE correo='paciente@test.com')
 INSERT INTO dbo.usuarios (nombre, apellido, correo, password_hash, fecha_nacimiento, id_rol, id_estado_cuenta, id_genero, fecha_registro)
-VALUES ('Camila','Rojas','paciente@test.com','HASH_PRUEBA_123456a','2002-05-10',@rolPaciente,@estActiva,@genF,SYSDATETIME());
+VALUES ('Camila','Rojas','paciente@test.com','v1$210000$AAAAAAAAAAAAAAAAAAAAAA$BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB','2002-05-10',@rolPaciente,@estActiva,@genF,SYSDATETIME());
 
 IF NOT EXISTS (SELECT 1 FROM dbo.usuarios WHERE correo='paciente2@test.com')
 INSERT INTO dbo.usuarios (nombre, apellido, correo, password_hash, fecha_nacimiento, id_rol, id_estado_cuenta, id_genero, fecha_registro)
-VALUES ('Juan','Perez','paciente2@test.com','HASH_PRUEBA_123456a','2001-03-15',@rolPaciente,@estPendVerif,@genM,SYSDATETIME());
+VALUES ('Juan','Perez','paciente2@test.com','v1$210000$AAAAAAAAAAAAAAAAAAAAAA$BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB','2001-03-15',@rolPaciente,@estPendVerif,@genM,SYSDATETIME());
 
 -- 2 psicologos (1 activo, 1 pendiente aprobacion)
 IF NOT EXISTS (SELECT 1 FROM dbo.usuarios WHERE correo='psicologo@test.com')
 INSERT INTO dbo.usuarios (nombre, apellido, correo, password_hash, fecha_nacimiento, id_rol, id_estado_cuenta, id_estado_aprobacion, id_genero, fecha_registro)
-VALUES ('Laura','Gomez','psicologo@test.com','HASH_PRUEBA_123456a','1988-07-20',@rolPsicologo,@estActiva,(SELECT id_estado FROM dbo.estados WHERE nombre='Aprobado'),@genF,SYSDATETIME());
+VALUES ('Laura','Gomez','psicologo@test.com','v1$210000$AAAAAAAAAAAAAAAAAAAAAA$BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB','1988-07-20',@rolPsicologo,@estActiva,(SELECT id_estado FROM dbo.estados WHERE nombre='Aprobado'),@genF,SYSDATETIME());
 
 IF NOT EXISTS (SELECT 1 FROM dbo.usuarios WHERE correo='psicologo.pendiente@test.com')
 INSERT INTO dbo.usuarios (nombre, apellido, correo, password_hash, fecha_nacimiento, id_rol, id_estado_cuenta, id_estado_aprobacion, id_genero, file_path, fecha_registro)
-VALUES ('Pedro','Lopez','psicologo.pendiente@test.com','HASH_PRUEBA_123456a','1992-11-05',@rolPsicologo,@estPendAprob,@estPendAprob,@genM,'C:\uploads\tarjeta_pedro.pdf',SYSDATETIME());
+VALUES ('Pedro','Lopez','psicologo.pendiente@test.com','v1$210000$AAAAAAAAAAAAAAAAAAAAAA$BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB','1992-11-05',@rolPsicologo,@estPendAprob,@estPendAprob,@genM,'C:\uploads\tarjeta_pedro.pdf',SYSDATETIME());
 GO
 
 -- Codigo de verificacion de prueba (123456, expira en 15 min)
