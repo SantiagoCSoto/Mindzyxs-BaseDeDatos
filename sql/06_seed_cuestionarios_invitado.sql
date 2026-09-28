@@ -3,7 +3,7 @@
 -- Cuestionarios Predeterminados/Publicados para invitados (PB-07)
 -- y pacientes registrados (PB-11). Escala 1-4:
 --   Nunca=1, A veces=2, A menudo=3, Casi siempre=4
--- Puntaje = promedio de respuestas tipo 'escala' (redondeado):
+-- Puntaje = promedio de respuestas tipo 'escala' u 'opcion_multiple' (redondeado):
 --   1-2 bajo, 3 medio, 4-5 alto. Preguntas tipo 'binaria'
 --   (ej. q4 Si/No) son obligatorias pero NO entran al promedio.
 -- Todas las preguntas son siempre obligatorias (HU1-PB7).
