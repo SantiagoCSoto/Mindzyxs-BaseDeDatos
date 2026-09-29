@@ -159,6 +159,7 @@ BEGIN
             UNION ALL SELECT 1 FROM dbo.observaciones o WHERE o.id_paciente = d.id_usuario OR o.id_psicologo = d.id_usuario
             UNION ALL SELECT 1 FROM dbo.autorizaciones a WHERE a.id_paciente = d.id_usuario OR a.id_psicologo = d.id_usuario
             UNION ALL SELECT 1 FROM dbo.asignaciones_cuestionario ac WHERE ac.id_paciente = d.id_usuario OR ac.id_psicologo = d.id_usuario
+            UNION ALL SELECT 1 FROM dbo.psicologo_especialidades pe WHERE pe.id_psicologo = d.id_usuario
             UNION ALL SELECT 1 FROM dbo.respaldos r WHERE r.id_admin = d.id_usuario
             UNION ALL SELECT 1 FROM dbo.cuestionarios c WHERE c.id_creador = d.id_usuario
             UNION ALL SELECT 1 FROM dbo.notificaciones_config n WHERE n.id_admin = d.id_usuario
