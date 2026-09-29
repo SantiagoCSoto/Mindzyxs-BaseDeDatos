@@ -259,7 +259,7 @@ Debes ver algo como:
 SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES ORDER BY TABLE_NAME;
 ```
 
-Deben salir **22 tablas**: asignaciones_cuestionario, auth, autorizaciones, codigos_verificacion, cuestionarios, dias_semana, especialidades, estados, eventos_bienestar, generos, instituciones, lineas_ayuda, niveles_riesgo, notificaciones_config, observaciones, opciones_pregunta, preguntas, recomendaciones, recordatorio_dias, recordatorios, respaldos, respuestas, roles, sesiones, tipos_evento, usuarios.
+Deben salir **23 tablas**: asignaciones_cuestionario, auth, autorizaciones, codigos_verificacion, cuestionarios, dias_semana, especialidades, estados, eventos_bienestar, generos, instituciones, lineas_ayuda, niveles_riesgo, notificaciones_config, observaciones, opciones_pregunta, preguntas, psicologo_especialidades, recomendaciones, recordatorio_dias, recordatorios, respaldos, respuestas, roles, sesiones, tipos_evento, usuarios.
 
 (son 26 si se cuentan las de la lista completa; el numero exacto "22" depende de si recontamos catalogos. Lo importante: todas las tablas del [Glosario](#glosario-de-tablas) existen.)
 
