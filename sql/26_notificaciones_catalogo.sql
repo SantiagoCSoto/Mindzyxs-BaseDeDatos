@@ -16,7 +16,7 @@ DECLARE @idAdmin INT = (
 IF @idAdmin IS NOT NULL
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM dbo.notificaciones_config WHERE tipo = 'CODE_SENT')
-        INSERT INTO dbo.notificaciones_config (id_admin, tipo, canales, asunto, cuerpo, activo)
+        INSERT INTO dbo.notificaciones_config (id_admin, tipo, canales, asunto, activo)
         VALUES (@idAdmin, 'CODE_SENT', 'correo', 'Mindzyxs - Código de verificación', 1);
 
     IF NOT EXISTS (SELECT 1 FROM dbo.notificaciones_config WHERE tipo = 'PASSWORD_RECOVERY')
