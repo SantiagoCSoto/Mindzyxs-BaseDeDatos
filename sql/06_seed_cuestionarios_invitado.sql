@@ -11,7 +11,12 @@
 -- USE Mindzyxs;
 -- =====================================================
 
-DECLARE @admin INT = (SELECT id_usuario FROM dbo.usuarios WHERE correo='admin@test.com');
+DECLARE @admin INT = (
+    SELECT TOP 1 u.id_usuario
+    FROM dbo.usuarios u
+    JOIN dbo.roles r ON r.id_rol = u.id_rol AND r.nombre = 'Administrador'
+    ORDER BY u.id_usuario
+);
 
 -- PASO 1: reescalar cuestionario 1 (prueba) de 0-3 a 1-4.
 UPDATE dbo.opciones_pregunta SET valor = valor + 1
