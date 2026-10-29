@@ -334,7 +334,6 @@ CREATE TABLE dbo.notificaciones_config (
   tipo VARCHAR(50) NOT NULL,
   canales VARCHAR(100) NOT NULL DEFAULT 'correo',
   asunto VARCHAR(255) NULL,
-  cuerpo TEXT NULL,
   activo BIT NOT NULL DEFAULT 1
 );
 END

@@ -199,13 +199,12 @@ Table recomendaciones {
 }
 
 Table notificaciones_config {
-  id_config int [pk, increment]
-  id_admin int [ref: > usuarios.id_usuario]
-  tipo varchar(50)
-  canales varchar(100) [note: 'correo,SMS,interna']
+  id_config int [pk, not null, increment]
+  id_admin int [not null, ref: > usuarios.id_usuario]
+  tipo varchar(50) [not null]
+  canales varchar(100) [not null, default: 'correo']
   asunto varchar(255) [null]
-  cuerpo text [null]
-  activo bit
+  activo bit [not null, default: 1]
 }
 
 Table respaldos {
@@ -214,6 +213,27 @@ Table respaldos {
   tamano varchar(20) [null]
   fecha_hora datetime
   id_admin int [ref: > usuarios.id_usuario]
+}
+
+Table conversaciones {
+  id_conversacion int [pk, increment]
+  id_paciente int [not null, ref: > usuarios.id_usuario]
+  id_psicologo int [not null, ref: > usuarios.id_usuario]
+  estado varchar(20) [not null, default: 'Pendiente', note: 'Pendiente, Aceptada, Rechazada, Bloqueada, Cerrada']
+  id_bloqueador int [null, ref: > usuarios.id_usuario]
+  fecha_creacion datetime [not null, default: `SYSDATETIME()`]
+  fecha_respuesta datetime [null]
+  indexes {
+    (id_paciente, id_psicologo) [unique]
+  }
+}
+
+Table psicologo_especialidades {
+  id_psicologo int [not null, ref: > usuarios.id_usuario]
+  id_especialidad int [not null, ref: > especialidades.id_especialidad]
+  indexes {
+    (id_psicologo, id_especialidad) [pk]
+  }
 }
 
 Table auth {
